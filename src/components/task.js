@@ -1,35 +1,41 @@
 import {MonthNames} from '../const.js';
 import {createElement, formatTime} from '../utils.js';
 
-const createHashtagsMarkup = (hashtags) => {
-  return hashtags
-    .map((hashtag) => {
-      return (
-        `<span class="card__hashtag-inner">
+export default class Task {
+  constructor(task) {
+    this._task = task;
+    this._element = null;
+  }
+
+  _createHashtagsMarkup(hashtags) {
+    return hashtags
+      .map((hashtag) => {
+        return (
+          `<span class="card__hashtag-inner">
             <span class="card__hashtag-name">
               #${hashtag}
             </span>
           </span>`
-      );
-    })
-    .join(`\n`);
-};
+        );
+      })
+      .join(`\n`);
+  }
 
-const createTaskTemplate = (task) => {
-  const {description, tags, dueDate, color, repeatingDays} = task;
+  _createTaskTemplate() {
+    const {description, tags, dueDate, color, repeatingDays} = this._task;
 
-  const isExpired = dueDate instanceof Date && dueDate < Date.now();
-  const isDateShowing = !!dueDate;
+    const isExpired = dueDate instanceof Date && dueDate < Date.now();
+    const isDateShowing = !!dueDate;
 
-  const date = isDateShowing ? `${dueDate.getDate()} ${MonthNames[dueDate.getMonth()]}` : ``;
-  const time = isDateShowing ? formatTime(dueDate) : ``;
+    const date = isDateShowing ? `${dueDate.getDate()} ${MonthNames[dueDate.getMonth()]}` : ``;
+    const time = isDateShowing ? formatTime(dueDate) : ``;
 
-  const hashtags = createHashtagsMarkup(Array.from(tags));
-  const repeatClass = Object.values(repeatingDays).some(Boolean) ? `card--repeat` : ``;
-  const deadlineClass = isExpired ? `card--deadline` : ``;
+    const hashtags = this._createHashtagsMarkup(Array.from(tags));
+    const repeatClass = Object.values(repeatingDays).some(Boolean) ? `card--repeat` : ``;
+    const deadlineClass = isExpired ? `card--deadline` : ``;
 
-  return (
-    `<article class="card card--${color} ${repeatClass} ${deadlineClass}">
+    return (
+      `<article class="card card--${color} ${repeatClass} ${deadlineClass}">
       <div class="card__form">
         <div class="card__inner">
           <div class="card__control">
@@ -73,17 +79,11 @@ const createTaskTemplate = (task) => {
         </div>
       </div>
     </article>`
-  );
-};
-
-export default class Task {
-  constructor(task) {
-    this._task = task;
-    this._element = null;
+    );
   }
 
   getTemplate() {
-    return createTaskTemplate(this._task);
+    return this._createTaskTemplate();
   }
 
   getElement() {
