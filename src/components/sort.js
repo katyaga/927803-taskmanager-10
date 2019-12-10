@@ -1,19 +1,22 @@
 import {createElement} from '../utils.js';
 
-export default class Board {
+export default class Sort {
   constructor() {
     this._element = null;
   }
 
-  _createBoardTemplate() {
+  _createSortTemplate() {
     return (
-      `<section class="board container">
-      </section>`
+      `<div class="board__filter-list">
+      <a href="#" class="board__filter">SORT BY DEFAULT</a>
+      <a href="#" class="board__filter">SORT BY DATE up</a>
+      <a href="#" class="board__filter">SORT BY DATE down</a>
+    </div>`
     );
   }
 
   getTemplate() {
-    return this._createBoardTemplate();
+    return this._createSortTemplate();
   }
 
   getElement() {
