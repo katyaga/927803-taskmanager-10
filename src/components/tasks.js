@@ -1,10 +1,6 @@
-import {createElement} from '../utils.js';
+import AbstractComponent from './abstract-component.js';
 
-export default class Tasks {
-  constructor() {
-    this._element = null;
-  }
-
+export default class Tasks extends AbstractComponent {
   _createTasksTemplate() {
     return (
       `<div class="board__tasks"></div>`
@@ -13,17 +9,5 @@ export default class Tasks {
 
   getTemplate() {
     return this._createTasksTemplate();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
