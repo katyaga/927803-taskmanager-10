@@ -1,4 +1,4 @@
-// import flatpickr from 'flatpickr';
+import flatpickr from 'flatpickr';
 import AbstractSmartComponent from './abstract-smart-component.js';
 import {COLORS, DAYS} from '../const.js';
 import {formatTime, formatDate} from '../utils/common.js';
@@ -200,7 +200,7 @@ export default class TaskEdit extends AbstractSmartComponent {
   rerender() {
     super.rerender();
 
-    // this._applyFlatpickr();
+    this._applyFlatpickr();
   }
 
   reset() {
@@ -222,21 +222,21 @@ export default class TaskEdit extends AbstractSmartComponent {
   }
 
   _applyFlatpickr() {
-    // if (this._flatpickr) {
-    //   // При своем создании `flatpickr` дополнительно создает вспомогательные DOM-элементы.
-    //   // Что бы их удалять, нужно вызывать метод `destroy` у созданного инстанса `flatpickr`.
-    //   this._flatpickr.destroy();
-    //   this._flatpickr = null;
-    // }
-    //
-    // if (this._isDateShowing) {
-    //   const dateElement = this.getElement().querySelector(`.card__date`);
-    //   this._flatpickr = flatpickr(dateElement, {
-    //     altInput: true,
-    //     allowInput: true,
-    //     defaultDate: this._task.dueDate,
-    //   });
-    // }
+    if (this._flatpickr) {
+      // При своем создании `flatpickr` дополнительно создает вспомогательные DOM-элементы.
+      // Что бы их удалять, нужно вызывать метод `destroy` у созданного инстанса `flatpickr`.
+      this._flatpickr.destroy();
+      this._flatpickr = null;
+    }
+
+    if (this._isDateShowing) {
+      const dateElement = this.getElement().querySelector(`.card__date`);
+      this._flatpickr = flatpickr(dateElement, {
+        altInput: true,
+        allowInput: true,
+        defaultDate: this._task.dueDate,
+      });
+    }
   }
 
   _subscribeOnEvents() {
