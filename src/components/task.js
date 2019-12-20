@@ -1,4 +1,4 @@
-import {formatTime, formatDate} from '../utils/common.js';
+import {formatTime, formatDate, isOverdueDate} from '../utils/common.js';
 import AbstractComponent from './abstract-component.js';
 
 export default class Task extends AbstractComponent {
@@ -34,14 +34,14 @@ export default class Task extends AbstractComponent {
   }
 
   _createTaskTemplate() {
-    const {description, tags, dueDate, color, repeatingDays} = this._task;
+    const {description: notSanitizedDescription, tags, dueDate, color, repeatingDays} = this._task;
 
-    const isExpired = dueDate instanceof Date && dueDate < Date.now();
+    const isExpired = dueDate instanceof Date && isOverdueDate(dueDate, new Date());
     const isDateShowing = !!dueDate;
 
-    // const date = isDateShowing ? `${dueDate.getDate()} ${MonthNames[dueDate.getMonth()]}` : ``;
     const date = isDateShowing ? formatDate(dueDate) : ``;
     const time = isDateShowing ? formatTime(dueDate) : ``;
+    const description = window.he.encode(notSanitizedDescription);
 
     const hashtags = this._createHashtagsMarkup(Array.from(tags));
     const editButton = this._createButtonMarkup(`edit`, true);
