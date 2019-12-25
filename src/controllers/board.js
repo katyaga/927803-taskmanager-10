@@ -58,7 +58,6 @@ export default class BoardController {
   }
 
   createTask() {
-    console.log(this._creatingTask);
     if (this._creatingTask) {
       return;
     }
