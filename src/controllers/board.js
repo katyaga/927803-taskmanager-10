@@ -37,6 +37,7 @@ export default class BoardController {
     this._onFilterChange = this._onFilterChange.bind(this);
 
     this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
+    this._tasksModel.setFilterChangeHandler(this._onFilterChange);
   }
 
   render() {
@@ -57,6 +58,7 @@ export default class BoardController {
   }
 
   createTask() {
+    console.log(this._creatingTask);
     if (this._creatingTask) {
       return;
     }
@@ -68,6 +70,10 @@ export default class BoardController {
   }
 
   _removeTasks() {
+    // const taskListElement = this._tasksComponent.getElement();
+    // taskListElement.innerHTML = ``;
+    // this._showedTaskControllers = [];
+
     this._showedTaskControllers.forEach((taskController) => taskController.destroy());
     this._showedTaskControllers = [];
   }

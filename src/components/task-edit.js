@@ -287,7 +287,6 @@ export default class TaskEdit extends AbstractSmartComponent {
 
     if (this._isDateShowing) {
       const dateElement = this.getElement().querySelector(`.card__date`);
-      // this._flatpickr = flatpickr(dateElement, {
       this._flatpickr = window.flatpickr(dateElement, {
         altInput: true,
         allowInput: true,
