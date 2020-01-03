@@ -13,24 +13,24 @@ const isAllowableDescriptionLength = (description) => {
     length <= MAX_DESCRIPTION_LENGTH;
 };
 
-const parseFormData = (formData) => {
-  const repeatingDays = DAYS.reduce((acc, day) => {
-    acc[day] = false;
-    return acc;
-  }, {});
-  const date = formData.get(`date`);
-
-  return {
-    description: formData.get(`text`),
-    color: formData.get(`color`),
-    tags: formData.getAll(`hashtag`),
-    dueDate: date ? new Date(date) : null,
-    repeatingDays: formData.getAll(`repeat`).reduce((acc, it) => {
-      acc[it] = true;
-      return acc;
-    }, repeatingDays),
-  };
-};
+// const parseFormData = (formData) => {
+//   const repeatingDays = DAYS.reduce((acc, day) => {
+//     acc[day] = false;
+//     return acc;
+//   }, {});
+//   const date = formData.get(`date`);
+//
+//   return {
+//     description: formData.get(`text`),
+//     color: formData.get(`color`),
+//     tags: formData.getAll(`hashtag`),
+//     dueDate: date ? new Date(date) : null,
+//     repeatingDays: formData.getAll(`repeat`).reduce((acc, it) => {
+//       acc[it] = true;
+//       return acc;
+//     }, repeatingDays),
+//   };
+// };
 
 export default class TaskEdit extends AbstractSmartComponent {
   constructor(task) {
@@ -257,9 +257,10 @@ export default class TaskEdit extends AbstractSmartComponent {
 
   getData() {
     const form = this.getElement().querySelector(`.card__form`);
-    const formData = new FormData(form);
-
-    return parseFormData(formData);
+    // const formData = new FormData(form);
+    //
+    // return parseFormData(formData);
+    return new FormData(form);
   }
 
   setSubmitHandler(handler) {
