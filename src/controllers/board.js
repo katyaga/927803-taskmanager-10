@@ -142,11 +142,6 @@ export default class BoardController {
             this._updateTasks(this._showingTasksCount);
           }
         });
-      // const isSuccess = this._tasksModel.updateTask(oldData.id, newData);
-      //
-      // if (isSuccess) {
-      //   taskController.render(newData, TaskControllerMode.DEFAULT);
-      // }
     }
   }
 
