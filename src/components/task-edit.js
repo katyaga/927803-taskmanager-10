@@ -6,31 +6,17 @@ import {formatTime, formatDate, isRepeating, isOverdueDate} from '../utils/commo
 const MIN_DESCRIPTION_LENGTH = 1;
 const MAX_DESCRIPTION_LENGTH = 140;
 
+const DefaultData = {
+  deleteButtonText: `Delete`,
+  saveButtonText: `Save`,
+};
+
 const isAllowableDescriptionLength = (description) => {
   const length = description.length;
 
   return length >= MIN_DESCRIPTION_LENGTH &&
     length <= MAX_DESCRIPTION_LENGTH;
 };
-
-// const parseFormData = (formData) => {
-//   const repeatingDays = DAYS.reduce((acc, day) => {
-//     acc[day] = false;
-//     return acc;
-//   }, {});
-//   const date = formData.get(`date`);
-//
-//   return {
-//     description: formData.get(`text`),
-//     color: formData.get(`color`),
-//     tags: formData.getAll(`hashtag`),
-//     dueDate: date ? new Date(date) : null,
-//     repeatingDays: formData.getAll(`repeat`).reduce((acc, it) => {
-//       acc[it] = true;
-//       return acc;
-//     }, repeatingDays),
-//   };
-// };
 
 export default class TaskEdit extends AbstractSmartComponent {
   constructor(task) {
@@ -41,6 +27,7 @@ export default class TaskEdit extends AbstractSmartComponent {
     this._isRepeatingTask = Object.values(task.repeatingDays).some(Boolean);
     this._activeRepeatingDays = Object.assign({}, task.repeatingDays);
     this._currentDescription = task.description;
+    this._externalData = DefaultData;
     this._flatpickr = null;
     this._deleteButtonClickHandler = null;
 
@@ -114,7 +101,7 @@ export default class TaskEdit extends AbstractSmartComponent {
 
   _createTaskEditTemplate(task, options = {}) {
     const {tags, dueDate, color} = task;
-    const {isDateShowing, isRepeatingTask, activeRepeatingDays, currentDescription} = options;
+    const {isDateShowing, isRepeatingTask, activeRepeatingDays, currentDescription, externalData} = options;
 
     const description = window.he.encode(currentDescription);
 
@@ -131,6 +118,9 @@ export default class TaskEdit extends AbstractSmartComponent {
     const tagsMarkup = this._createHashtags(tags);
     const colorsMarkup = this._createColorsMarkup(COLORS, color);
     const repeatingDaysMarkup = this._createRepeatingDaysMarkup(DAYS, activeRepeatingDays);
+
+    const deleteButtonText = externalData.deleteButtonText;
+    const saveButtonText = externalData.saveButtonText;
 
     return (
       `<article class="card card--edit card--${color} ${repeatClass} ${deadlineClass}">
@@ -205,8 +195,8 @@ export default class TaskEdit extends AbstractSmartComponent {
                 </div>
               </div>
               <div class="card__status-btns">
-                   <button class="card__save" type="submit" ${isBlockSaveButton ? `disabled` : ``}>save</button>
-              <button class="card__delete" type="button">delete</button>
+                   <button class="card__save" type="submit" ${isBlockSaveButton ? `disabled` : ``}>${saveButtonText}</button>
+              <button class="card__delete" type="button">${deleteButtonText}</button>
             </div>
           </div>
            </form>
@@ -218,6 +208,7 @@ export default class TaskEdit extends AbstractSmartComponent {
     return this._createTaskEditTemplate(this._task, {
       isDateShowing: this._isDateShowing,
       isRepeatingTask: this._isRepeatingTask,
+      externalData: this._externalData,
       activeRepeatingDays: this._activeRepeatingDays,
       currentDescription: this._currentDescription,
     });
@@ -257,10 +248,12 @@ export default class TaskEdit extends AbstractSmartComponent {
 
   getData() {
     const form = this.getElement().querySelector(`.card__form`);
-    // const formData = new FormData(form);
-    //
-    // return parseFormData(formData);
     return new FormData(form);
+  }
+
+  setData(data) {
+    this._externalData = Object.assign({}, DefaultData, data);
+    this.rerender();
   }
 
   setSubmitHandler(handler) {
@@ -291,6 +284,7 @@ export default class TaskEdit extends AbstractSmartComponent {
       this._flatpickr = window.flatpickr(dateElement, {
         altInput: true,
         allowInput: true,
+        dateFormat: `F d, Y H:i`,
         defaultDate: this._task.dueDate,
       });
     }

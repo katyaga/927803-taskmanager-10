@@ -48,9 +48,7 @@ export default class Tasks {
     if (index === -1) {
       return false;
     }
-
     this._tasks = [].concat(this._tasks.slice(0, index), task, this._tasks.slice(index + 1));
-
     this._callHandlers(this._dataChangeHandlers);
 
     return true;
