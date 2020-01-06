@@ -5,7 +5,6 @@ import SiteMenuComponent, {MenuItem} from './components/menu.js';
 import TasksModel from './models/tasks.js';
 import BoardController from './controllers/board.js';
 import StatisticsComponent from './components/statistics.js';
-// import {generateTasks} from './mock/task.js';
 import {render, RenderPosition} from './utils/render.js';
 
 const AUTHORIZATION = `Basic dXNlckBwYXNzd29yZAo=`;
@@ -19,16 +18,12 @@ const dateFrom = (() => {
   return d;
 })();
 
-// const TASK_COUNT = 22;
 const api = new API(END_POINT, AUTHORIZATION);
 
 const siteMainElement = document.querySelector(`.main`);
 const siteHeaderElement = siteMainElement.querySelector(`.main__control`);
 const siteMenuComponent = new SiteMenuComponent();
 const statisticsComponent = new StatisticsComponent({tasks: tasksModel, dateFrom, dateTo});
-
-// const tasks = generateTasks(TASK_COUNT);
-// tasksModel.setTasks(tasks);
 
 const boardComponent = new BoardComponent();
 const boardController = new BoardController(boardComponent, tasksModel, api);
@@ -40,7 +35,6 @@ render(siteMainElement, boardComponent, RenderPosition.BEFOREEND);
 render(siteMainElement, statisticsComponent, RenderPosition.BEFOREEND);
 
 statisticsComponent.hide();
-// boardController.render();
 
 siteMenuComponent.setOnChange((menuItem) => {
   switch (menuItem) {
@@ -64,6 +58,5 @@ siteMenuComponent.setOnChange((menuItem) => {
 api.getTasks()
   .then((tasks) => {
     tasksModel.setTasks(tasks);
-    console.log(tasks);
     boardController.render();
   });
